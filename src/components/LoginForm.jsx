@@ -1,11 +1,10 @@
-import loginService from '../services/userLogin'
 import blogService from '../services/blogs'
+import loginService from '../services/userLogin'
+
 const LoginForm = ({username, password, setUsername, setPassword, setUser, setErrorMessage, setErrorState, errorMessage}) => {
     
 const handleLogin = async (event) => {
-        event.preventDefault()
-        console.log('loggin in with', username, password)
-    
+        event.preventDefault()   
 try {
     const user = await loginService.login({
         username, password
@@ -15,6 +14,11 @@ try {
     )
     blogService.setToken(user.token)
     setUser(user)
+    setErrorState(false)
+    setErrorMessage('logged succesfully')
+    setTimeout(()=>{
+        setErrorMessage(null)
+    }, 2000)
     setUsername('')
     setPassword('')
 }
@@ -25,7 +29,7 @@ catch (excepcion) {
         setErrorMessage(null)
     }, 5000)
 }
-    }
+}
 
 return (
     <form onSubmit={handleLogin}>
