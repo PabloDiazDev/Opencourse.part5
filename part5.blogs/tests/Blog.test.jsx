@@ -1,9 +1,10 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import Blog from '../src/components/Blog'
+import Blog from '../components/Blog'
 import { expect, vi } from 'vitest'
-import * as blogHandlers from '../src/handlers/blogHandlers'
-import BlogForm from '../src/components/BlogForm'
+import * as blogHandlers from '../handlers/blogHandlers'
+import BlogForm from '../components/BlogForm'
+import blogService from '../services/blogs'
 
 window.localStorage.setItem('loggedUserData', JSON.stringify({ username: 'testuser' }))
 
@@ -81,7 +82,6 @@ test('When clicks on like button, event handler is called twice', async () => {
             setErrorState={() => {}}
         />
     )
-    screen.debug()
     const user = userEvent.setup()
     const button1 = screen.getByText('Show details')
     await user.click(button1)
@@ -91,14 +91,17 @@ test('When clicks on like button, event handler is called twice', async () => {
     expect(mockhandler.mock.calls).toHaveLength(2)
 })
 
-test('When u create a new blog, ther for calls handler with correct parameters', async () => {
-    const mockSetBlogs=vi.fn()
+test('When u create a new blog, the handler receives correct parameters (just input values)', async () => {
+   const createMocked = vi.spyOn(blogService, 'create').mockImplementation(async (blog) => ({
+        ...blog,
+        likes: 0,
+        user: { username: 'testuser' },
+        id: '1233'
+    }))
     const blog = {
         title: 'Test Blog',
         author: 'Test Author',
         url: 'http://testblog.com',
-        likes: 42,
-        user: { username: 'testuser' }
     }
     render (
         <BlogForm
@@ -106,7 +109,7 @@ test('When u create a new blog, ther for calls handler with correct parameters',
           setBlogs={() => {}}
           blogs={[]}
           setErrorMessage={() => {}}
-          blogFormRef={() => {}}
+          blogFormRef={{ current: { toggleVisibility: () => {} } }}
         />
     )
 
@@ -119,14 +122,11 @@ test('When u create a new blog, ther for calls handler with correct parameters',
     await user.type(inputTitle, blog.title)
     await user.type(inputAuthor, blog.author)
     await user.type(inputUrl, blog.url)
-    await user.click(button)
-    console.log(mockSetBlogs)
-    expect(mockSetBlogs).toContainEqual({
+    await user.click(button) 
+    expect(createMocked).toHaveBeenCalledWith(blog)
+    expect(createMocked).toHaveBeenCalledWith({
         title: blog.title,
         author: blog.author,
-        url: blog.url,
-        likes: 0
-    })  
-
-   
+        url: blog.url
+    })
 })

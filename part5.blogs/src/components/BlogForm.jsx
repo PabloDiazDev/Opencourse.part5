@@ -1,18 +1,17 @@
-import { useState } from 'react'
 import blogService from '../services/blogs'
+import { useState } from 'react'
 
-const BlogForm = ({setErrorState, setBlogs, blogs, setErrorMessage, blogFormRef} ) => {
+const BlogForm = ({setErrorState, setBlogs, blogs, setErrorMessage, blogFormRef, }) => {
     const [title, setTitle] = useState ('')
     const [author, setAuthor] = useState ('')
     const [url, setUrl] = useState ('')
 const blogPostHandler = async (event) => {
     event.preventDefault()
 
-
 try {
     const newBlog = await blogService.create ({ title, author, url})
     setErrorState(false)
-    setErrorMessage('Blog created succesfully')
+    setErrorMessage('blog created succesfully')
     setTimeout(() => {
         setErrorMessage(null)
     }, 5000)
@@ -35,15 +34,15 @@ try {
             <form onSubmit={blogPostHandler} >
                 <div>
                     Title
-                    <input type="text" value={title} placeholder='Title' onChange={({target}) => setTitle(target.value)}/>
+                    <input type="text" value={title} placeholder='Title' onChange={event => setTitle(event.target.value)}/>
                 </div>
                 <div>
                     Author
-                    <input type="text" value={author} placeholder="Author" onChange={({target}) => setAuthor(target.value)}/>
+                    <input type="text" value={author} placeholder="Author" onChange={event => setAuthor(event.target.value)}/>
                 </div>
                 <div>
                     URL
-                    <input type="text" value={url} placeholder="URL" onChange={({target}) => setUrl(target.value)}/>
+                    <input type="text" value={url} placeholder="URL" onChange={event => setUrl(event.target.value)}/>
                 </div>
                 <div>
                     <button type="submit"> Post blog </button>

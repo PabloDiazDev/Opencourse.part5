@@ -5,11 +5,11 @@ const Blog = ({ blog, setBlogs, blogs, setErrorState, setErrorMessage }) => {
   const [showDetails, setShowDetails] = useState(false)
   
 const loggedUserData = window.localStorage.getItem('loggedUserData')
-const isUserBlogCreator =
-  blog.user &&
-  loggedUserData &&
-  blog.user.username === JSON.parse(loggedUserData).username
 
+const isUserBlogCreator = 
+blog.user && 
+loggedUserData && 
+blog.user === JSON.parse(loggedUserData).id
   return (
     <div>
       {blog.title} by {blog.author}
@@ -19,10 +19,10 @@ const isUserBlogCreator =
       {showDetails && (
         <>
           <div>URL: {blog.url}</div>
-          <div>Likes: {blog.likes}</div>
+          <div data-testid="likes">{blog.likes}</div>
           <button data-testid="like-button" onClick={() => handleLike(blog.id, setBlogs, blogs)}>Like</button>
           {isUserBlogCreator && (
-            <button onClick={() => handleDelete(blog.id, blogs, setBlogs, setErrorState, setErrorMessage)}>Delete blog</button>
+            <button data-testid="delete-button" onClick={() => handleDelete(blog.id, blogs, setBlogs, setErrorState, setErrorMessage)}>Delete blog</button>
           )}
         </>
       )}

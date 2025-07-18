@@ -24,10 +24,10 @@ const messageStyleError = {
         </div>
     )
     else if (errorMessage !== null && errorState === false)
-        return(
-    <div style={messageStyleSucces}>
+    return(
+        <div style={messageStyleSucces}>
         {errorMessage}
-    </div>
+        </div>
         )
         return null
 }

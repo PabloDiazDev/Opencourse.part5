@@ -1,7 +1,7 @@
 import blogService from '../services/blogs'
 import loginService from '../services/userLogin'
 
-const LoginForm = ({username, password, setUsername, setPassword, setUser, setErrorMessage, setErrorState, errorMessage}) => {
+const LoginForm = ({username, password, setUsername, setPassword, handleUsernameChange, handlePasswordChange, setUser, setErrorMessage, setErrorState, errorMessage}) => {
     
 const handleLogin = async (event) => {
         event.preventDefault()   
@@ -15,12 +15,13 @@ try {
     blogService.setToken(user.token)
     setUser(user)
     setErrorState(false)
-    setErrorMessage('logged succesfully')
+    setErrorMessage('logged successfully')
     setTimeout(()=>{
         setErrorMessage(null)
-    }, 2000)
+    }, 5000)
     setUsername('')
     setPassword('')
+
 }
 catch (excepcion) {
     setErrorState(true)
@@ -32,15 +33,15 @@ catch (excepcion) {
 }
 
 return (
-    <form onSubmit={handleLogin}>
-        <div>{errorMessage}</div>
+    <form onSubmit={handleLogin} test-id="login-form">
         <div>
             Username:
             <input
              type="text"
              value={username}
              name="Username"
-             onChange={({ target }) => setUsername(target.value)}
+             placeholder='Enter your username'
+             onChange={handleUsernameChange}
              />
         </div>
         <div>
@@ -49,11 +50,12 @@ return (
             type="password"
             value={password}
             name="Password"
-            onChange={({ target }) => setPassword(target.value)}
+            placeholder='Enter your password'
+            onChange={handlePasswordChange}
             />
         </div>
         <div>
-            <button type="submit"> Login </button>
+            <button type="submit"> Log in </button>
         </div>
     </form>
 )

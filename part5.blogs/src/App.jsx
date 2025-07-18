@@ -13,7 +13,7 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [errorState, setErrorState] = useState(false)
   const [user, setUser] = useState(null)
-  const blogFormRef = useRef()
+  const blogFormRef = useRef() 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
@@ -31,18 +31,21 @@ const App = () => {
 
 return (
   <div>
-    {user === null ? (
-      <>
+          
         <Notifications 
           errorMessage={errorMessage} 
           errorState={errorState}
         />
+    {user === null ? (
+      <>
         <Togglable buttonLabel="Login">
           <LoginForm
             username={username}
             password={password}
             setUsername={setUsername}
             setPassword={setPassword}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
             setUser={setUser}
             setErrorMessage={setErrorMessage}
             setErrorState={setErrorState}
@@ -61,10 +64,6 @@ return (
             setErrorState={setErrorState}
           />
         </div>
-        <Notifications 
-          errorMessage={errorMessage} 
-          errorState={errorState}
-        />
         <h2>New blog form</h2>
         <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
         <BlogForm

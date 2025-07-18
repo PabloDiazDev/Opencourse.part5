@@ -12,12 +12,12 @@ import blogService from "../services/blogs"
     ))
   }
 
-  export const handleDelete = async (id) => {
+  export const handleDelete = async (id, blogs, setBlogs, setErrorState, setErrorMessage) => {
     if (!window.confirm("Are you sure you want to delete this blog?")) {
       return
     }
     try {
-      await blogService.supr(id, blogs, setBlogs, setErrorState, setErrorMessage)
+      await blogService.supr(id)
       setErrorState(false)
       setErrorMessage('Blog deleted successfully')
       setTimeout(() => {
